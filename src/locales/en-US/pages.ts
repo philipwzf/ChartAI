@@ -1,10 +1,17 @@
 export default {
-  'pages.layouts.userLayout.title':
-    'Chart AI is the most influential web design specification in Xihu district',
+  'pages.register.success': 'Register successful!',
+  'pages.register.failure': 'Register failed, please try again!',
+  'pages.registration.tab': 'Register',
+  'pages.password.length':'Password must be longer than 8！',
+  'pages.register.checkPassword.placeholder':'Check Password',
+  'pages.register.checkpassword.required':'Please enter password again',
+
+
   'pages.login.accountLogin.tab': 'Account Login',
   'pages.login.accountLogin.errorMessage': 'Incorrect username/password',
   'pages.login.failure': 'Login failed, please try again!',
   'pages.login.success': 'Login successful!',
+
   'pages.login.username.placeholder': 'Username',
   'pages.login.username.required': 'Please input your username!',
   'pages.login.password.placeholder': 'Password',
