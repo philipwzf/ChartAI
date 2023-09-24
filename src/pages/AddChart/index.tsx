@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {genChartByAiUsingPOST} from "@/services/chartAI/chartController";
 import {UploadOutlined} from '@ant-design/icons';
 
-import {Button, Form, Input, message, Select, Space, Upload,} from 'antd';
+import {Button, Card, Col, Divider, Form, Input, message, Row, Select, Space, Spin, Upload,} from 'antd';
 import TextArea from "antd/es/input/TextArea";
 import ReactECharts from 'echarts-for-react';
 
@@ -20,6 +20,8 @@ const AddChart: React.FC = () => {
       }
       //Set submitting to be true
       setSubmitting(true);
+      setChart(undefined);
+      setOptions(undefined);
 
     const params = {
       ...values,
@@ -28,7 +30,7 @@ const AddChart: React.FC = () => {
     try{
       const res = await genChartByAiUsingPOST(params,{},values.file.file.originFileObj);
       if(!res?.data){
-        message.error('Analyses Failed');
+        message.error('Analyses Failed. Data is empty');
       }else{
         message.success('Analyses Succeed');
         const str = res.data.genChart ?? "";
@@ -53,66 +55,76 @@ const AddChart: React.FC = () => {
 
   return (
     <div className={"add-chart"}>
-      <Form
-        name="addChart"
-        onFinish={onFinish}
-        initialValues={{ }}
-        style={{ maxWidth: 600 }}
-      >
+      <Row gutter={24}>
+        <Col span={12}>
+          <Card title="Chart AI">
+            <Form
+              name="addChart"
+              onFinish={onFinish}
+              initialValues={{ }}
+              style={{ maxWidth: 600 }}
+            >
 
-        {/*Goal Input*/}
-        <Form.Item name="goal" label="Goal" rules={[{required: true, message:"Please put in the Goal for analysis!"}]}>
-          <TextArea placeholder="Please put int the Goal for analysis, for example: Analyze the User Trend"/>
-        </Form.Item>
+              {/*Goal Input*/}
+              <Form.Item name="goal" label="Goal" rules={[{required: true, message:"Please put in the Goal for analysis!"}]}>
+                <TextArea placeholder="Please put int the Goal for analysis, for example: Analyze the User Trend"/>
+              </Form.Item>
 
-        {/*Name Input*/}
-        <Form.Item name="name" label="Chart Name">
-          <Input placeholder="Please input the chart name"/>
-        </Form.Item>
+              {/*Name Input*/}
+              <Form.Item name="name" label="Chart Name">
+                <Input placeholder="Please input the chart name"/>
+              </Form.Item>
 
-        {/*Chart Type Input   */}
-        <Form.Item
-          name="selectChartType"
-          label="Chart Type"
-        >
-          <Select>
-            <Option value="PieChart">Pie Chart</Option>
-            <Option value="BarChart">Bar Chart</Option>
-            <Option value="LineChart">Line Chart</Option>
-            <Option value="ScatterPlot">Scatter Plot</Option>
-            <Option value=""> Empty the Field</Option>
-          </Select>
-        </Form.Item>
+              {/*Chart Type Input   */}
+              <Form.Item
+                name="chartType"
+                label="Chart Type"
+              >
+                <Select>
+                  <Option value="PieChart">Pie Chart</Option>
+                  <Option value="BarChart">Bar Chart</Option>
+                  <Option value="LineChart">Line Chart</Option>
+                  <Option value="ScatterPlot">Scatter Plot</Option>
+                  <Option value=""> Empty the Field</Option>
+                </Select>
+              </Form.Item>
 
-        <Form.Item
-          name="file"
-          label="Date"
-        >
-          <Upload name="file">
-            <Button icon={<UploadOutlined />}>Click to upload</Button>
-          </Upload>
-        </Form.Item>
+              <Form.Item
+                name="file"
+                label="Date"
+              >
+                <Upload name="file">
+                  <Button icon={<UploadOutlined />}>Click to upload</Button>
+                </Upload>
+              </Form.Item>
 
-        <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-          <Space>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            <Button htmlType="reset">reset</Button>
-          </Space>
-        </Form.Item>
-      </Form>
-        <div>
-            Generated Result: {chart?.genResult}
-        </div>
-      <div>
-        Generate Graph:
-        {options ? (
-          <ReactECharts option={options}/>
-        ) : (
-          <p>No chart options provided</p>
-        )}
-      </div>
+              <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                <Space>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                  <Button htmlType="reset">reset</Button>
+                </Space>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="Generate Result">
+            {chart?.genResult ?? <div>Please submit data on the left</div>}
+            <Spin spinning={submitting}/>
+          </Card>
+          <Divider/>
+          <Card title="Generated Graph">
+            {options ? (
+              <ReactECharts option={options}/>
+            ) : (
+              <p>No Data provided</p>
+            )}
+            <Spin spinning={submitting}/>
+          </Card>
+        </Col>
+      </Row>
 
 
     </div>

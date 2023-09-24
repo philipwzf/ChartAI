@@ -7,7 +7,9 @@
         { name: '注册', path: '/user/register', component: './User/Register' },],
   },
   {path:'/',redirect: '/add_chart'},
-  { path: '/add_chart', name: 'Add Chart Page', icon: 'table', component: './AddChart' },
+  { path: '/add_chart', name: 'Create Chart', icon: 'barChart', component: './AddChart' },
+  { path: '/my_chart', name: 'My Chart', icon: 'pieChart', component: './MyChart' },
+
 
   {
     path: '/admin',
